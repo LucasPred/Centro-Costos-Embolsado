@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GRAVAFILT S.A. - Control Integral de Costos y Planta</title>
-  <!-- Chart.js para Gráficos -->
+  <title>GRAVAFILT S.A. - Matriz de Costeo e Integración Operativa</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -23,38 +22,34 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: var(--bg-dark); color: var(--text-main); padding: 15px; font-size: 13px; line-height: 1.4; }
-    .container { max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+    .container { max-width: 1650px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
 
-    /* Header */
     header { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px 20px; border-radius: 8px; border: 1px solid var(--border-color); }
     header h1 { font-size: 1.3rem; color: #fff; }
     header p { color: var(--text-muted); font-size: 0.85rem; }
 
-    /* Cards & Layout */
     .section-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; }
-    .section-title { font-size: 1rem; color: var(--accent-blue); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+    .section-title { font-size: 0.98rem; color: var(--accent-blue); margin-bottom: 12px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+    
     .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
     .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-    /* KPIs */
     .kpi-card { background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; text-align: center; }
-    .kpi-title { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .kpi-value { font-size: 1.3rem; font-weight: bold; margin-top: 4px; color: #fff; }
+    .kpi-title { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .kpi-value { font-size: 1.35rem; font-weight: bold; margin-top: 4px; color: #fff; }
 
-    /* Forms, Inputs & Tables */
     .form-group { display: flex; flex-direction: column; gap: 4px; }
-    label { font-size: 0.78rem; color: var(--text-muted); }
-    input, select { background-color: var(--input-bg); border: 1px solid var(--border-color); color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 0.82rem; outline: none; }
-    input:focus, select:focus { border-color: var(--accent-blue); }
+    label { font-size: 0.76rem; color: var(--text-muted); font-weight: 500; }
+    input, select, textarea { background-color: var(--input-bg); border: 1px solid var(--border-color); color: #fff; padding: 6px 9px; border-radius: 4px; font-size: 0.82rem; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent-blue); }
 
     table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.82rem; }
     th, td { border: 1px solid var(--border-color); padding: 7px 9px; text-align: left; }
     th { background: rgba(0,0,0,0.4); color: var(--text-muted); text-transform: uppercase; font-size: 0.72rem; }
     tr:nth-child(even) { background-color: rgba(255,255,255,0.02); }
 
-    /* Buttons */
     .btn { background: var(--accent-blue); color: #fff; border: none; padding: 7px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
     .btn:hover { opacity: 0.9; }
     .btn-success { background: var(--accent-green); }
@@ -62,14 +57,11 @@
     .btn-warning { background: var(--accent-yellow); color: #000; }
     .btn-purple { background: var(--accent-purple); }
     .btn-sm { padding: 4px 8px; font-size: 0.75rem; }
-    .btn-counter { font-size: 1.1rem; padding: 2px 10px; }
 
-    /* Modals */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.92); display: none; justify-content: center; align-items: center; z-index: 9999; }
     .modal-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 12px; }
-    .modal-admin-panel { background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; width: 98%; max-width: 1550px; max-height: 92vh; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+    .modal-admin-panel { background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; width: 98%; max-width: 1600px; max-height: 94vh; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
 
-    /* Utility Badges */
     .badge { padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; font-weight: bold; display: inline-block; }
     .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
     .badge-success { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
@@ -78,66 +70,66 @@
 <body>
 
   <div class="container">
-    <!-- HEADER -->
+    <!-- HEADER GERENCIAL -->
     <header>
       <div>
-        <h1>GRAVAFILT S.A. - Tablero Gerencial de Planta</h1>
-        <p>Monitoreo Crítico de Costos, Eficiencia Operativa y VNR en Tiempo Real</p>
+        <h1>GRAVAFILT S.A. - Matriz de Costeo Operativo e Insumos</h1>
+        <p>Modelo Interrelacionado de Producción, Categorías AOMA, Empaque y Tiempos Muertos</p>
       </div>
-      <div style="display: flex; gap: 10px;">
+      <div style="display: flex; gap: 8px;">
         <button class="btn btn-warning" onclick="toggleModal('loginModal', true)">🔒 Panel Administrador</button>
         <button class="btn btn-success" onclick="exportToExcel()">📊 Exportar Excel</button>
         <button class="btn btn-purple" onclick="exportToVNR()">🔄 Sync Matriz VNR</button>
       </div>
     </header>
 
-    <!-- KPIS CRÍTICOS DEL DASHBOARD -->
+    <!-- KPIS CRÍTICOS -->
     <section class="grid-5">
       <div class="kpi-card">
-        <div class="kpi-title">OEE Planta (Global)</div>
-        <div class="kpi-value" id="dash-oee" style="color: var(--accent-green);">0%</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Costo por Tonelada</div>
+        <div class="kpi-title">Costo Total por Tonelada</div>
         <div class="kpi-value" id="dash-costo-tn" style="color: var(--accent-yellow);">$ 0</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Costo por Hora</div>
-        <div class="kpi-value" id="dash-costo-hs">$ 0</div>
+        <div class="kpi-title">Costo Operativo por Hora</div>
+        <div class="kpi-value" id="dash-costo-hs" style="color: var(--accent-blue);">$ 0</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Producción Total</div>
+        <div class="kpi-title">Producción Proyectada</div>
         <div class="kpi-value" id="dash-tn-totales">0 Tn</div>
       </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Desvío Tiempos Muertos</div>
+        <div class="kpi-value" id="dash-desvio-min" style="color: var(--accent-purple);">0 Min</div>
+      </div>
       <div class="kpi-card" style="border-left: 4px solid var(--accent-red);">
-        <div class="kpi-title">Castigo por Ineficiencia</div>
-        <div class="kpi-value" id="dash-castigo-total" style="color: var(--accent-red);">$ 0</div>
+        <div class="kpi-title">Pérdida por Ineficiencias</div>
+        <div class="kpi-value" id="dash-perdida-total" style="color: var(--accent-red);">$ 0</div>
       </div>
     </section>
 
-    <!-- GRÁFICOS DASHBOARD -->
+    <!-- CHARTS -->
     <div class="grid-2">
       <section class="section-card">
-        <div class="section-title">Estructura de Costos por Rubro y Familia</div>
-        <div style="height: 280px;"><canvas id="chartRubros"></canvas></div>
+        <div class="section-title">Distribución de Costos ($/Tn) por Rubro Específico</div>
+        <div style="height: 270px;"><canvas id="chartRubros"></canvas></div>
       </section>
       <section class="section-card">
-        <div class="section-title">Análisis de Desvíos y Tiempos Muertos (Minutos)</div>
-        <div style="height: 280px;"><canvas id="chartDesvios"></canvas></div>
+        <div class="section-title">Impacto Económico de Paradas y Tiempos Muertos</div>
+        <div style="height: 270px;"><canvas id="chartDesvios"></canvas></div>
       </section>
     </div>
 
-    <!-- VARIABLES CRÍTICAS EN TIEMPO REAL -->
+    <!-- TABLA DE CONTROL OPERATIVO SINTÉTICO -->
     <section class="section-card">
-      <div class="section-title">Variables Críticas de Control Operativo</div>
+      <div class="section-title">Matriz Sintética de Variables Críticas de Planta</div>
       <table>
         <thead>
           <tr>
-            <th>Parámetro de Planta</th>
-            <th>Valor Actual</th>
-            <th>Rango Objetivo</th>
-            <th>Impacto Financiero Directo</th>
-            <th>Estado</th>
+            <th>Variable de Control Operativo</th>
+            <th>Valor Registrado</th>
+            <th>Parámetro / Objetivo Preseteado</th>
+            <th>Impacto Directo en Matriz</th>
+            <th>Diagnóstico</th>
           </tr>
         </thead>
         <tbody id="dashTbodyVariables"></tbody>
@@ -145,11 +137,11 @@
     </section>
   </div>
 
-  <!-- MODAL LOGIN ADMIN -->
+  <!-- MODAL LOGIN -->
   <div class="modal-overlay" id="loginModal">
     <div class="modal-card">
       <h2 style="color: var(--accent-blue); text-align: center;">Acceso Administrador</h2>
-      <p style="text-align: center; color: var(--text-muted);">Consola de Gestión y Costos GRAVAFILT</p>
+      <p style="text-align: center; color: var(--text-muted);">Configuración y Sincronización de Costos</p>
       <div class="form-group">
         <label>Usuario</label>
         <input type="text" id="adminUser" value="gravafilt">
@@ -166,124 +158,136 @@
     </div>
   </div>
 
-  <!-- PANEL ADMINISTRADOR COMPLETO (MICROSITIO) -->
+  <!-- PANEL ADMIN COMPLETO -->
   <div class="modal-overlay" id="adminPanelModal">
     <div class="modal-admin-panel">
       
       <!-- HEADER ADMIN -->
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">
         <div>
-          <h2 style="color: var(--accent-yellow);">Consola de Administración, Costos y Registro Histórico</h2>
-          <p style="color: var(--text-muted);">Configuración de Parámetros, Sistema de Doble Empaque y Matriz Financiera</p>
+          <h2 style="color: var(--accent-yellow);">Matriz de Configuración General, Insumos y Categorías AOMA</h2>
+          <p style="color: var(--text-muted);">Ajuste Automático de Parámetros de Empaque, Mantenimiento, Paradas y Costos</p>
         </div>
         <div style="display: flex; gap: 8px;">
-          <button class="btn btn-purple" onclick="registrarJornadaEnHistorial()">💾 Guardar y Registrar Jornada</button>
-          <button class="btn btn-success" onclick="saveAdminChanges()">🔄 Sincronizar con Dashboard Principal</button>
+          <button class="btn btn-danger" onclick="resetToZero()">↺ Resetear Variables a 0</button>
+          <button class="btn btn-warning" onclick="resetToFactoryDefaults()">⚙ Restablecer Valores de Fábrica</button>
+          <button class="btn btn-purple" onclick="registrarJornadaEnHistorial()">💾 Guardar Jornada</button>
+          <button class="btn btn-success" onclick="saveAdminChanges()">🔄 Sincronizar Dashboard</button>
           <button class="btn btn-danger" onclick="toggleModal('adminPanelModal', false)">✕ Cerrar</button>
         </div>
       </div>
 
-      <!-- PANEL 1: REGISTRO OPERATIVO Y DOBLE EMPAQUE EN TIEMPO REAL -->
+      <!-- SECCIÓN 1: PARAMETRIZACIÓN BASE DE ENERGÍA Y MANO DE OBRA AOMA -->
       <section class="section-card">
-        <div class="section-title">
-          <span>Panel 1: Control de Doble Empaque y Castigo de Ineficiencia</span>
-          <span class="badge badge-success">Operativo en Línea</span>
+        <div class="section-title">1. Parámetros Base de Planta, Energía y Personal AOMA</div>
+        <div class="grid-5">
+          <div class="form-group">
+            <label>Valor KWh Energía Electricidad ($)</label>
+            <input type="number" id="costoKwh" onchange="recalculateAll()">
+          </div>
+          <div class="form-group">
+            <label>Consumo Promedio Planta (KWh/Hs)</label>
+            <input type="number" id="consumoKwhHs" onchange="recalculateAll()">
+          </div>
+          <div class="form-group">
+            <label>Mantenimiento y Estructura ($/Hs)</label>
+            <input type="number" id="costoMantenimientoHs" onchange="recalculateAll()">
+          </div>
+          <div class="form-group">
+            <label>Cantidad Operarios Activos</label>
+            <input type="number" id="cantOperarios" onchange="recalculateAll()">
+          </div>
+          <div class="form-group">
+            <label>Categoría Dominante AOMA</label>
+            <select id="categoriaAOMA" onchange="recalculateAll()">
+              <option value="12500">Oficial Especializado ($12.500/hs)</option>
+              <option value="10800">Oficial ($10.800/hs)</option>
+              <option value="9500">Medio Oficial ($9.500/hs)</option>
+              <option value="8200">Peón ($8.200/hs)</option>
+            </select>
+          </div>
         </div>
+      </section>
+
+      <!-- SECCIÓN 2: PARAMETRIZACIÓN DE EMPAQUE (25KG Y PORTABOLSAS MULTIVOLUMEN) -->
+      <section class="section-card">
+        <div class="section-title">2. Parámetros de Empaque y Especificaciones de Portabolsas</div>
+        <div class="grid-5">
+          <div class="form-group">
+            <label>Capacidad Portabolsas Expedición</label>
+            <select id="volumenPortabolsas" onchange="recalculateAll()">
+              <option value="1000">1000 kg (1.00 Tn)</option>
+              <option value="1050">1050 kg (1.05 Tn)</option>
+              <option value="1100">1100 kg (1.10 Tn)</option>
+              <option value="1150">1150 kg (1.15 Tn)</option>
+              <option value="1200" selected>1200 kg (1.20 Tn)</option>
+              <option value="1250">1250 kg (1.25 Tn)</option>
+              <option value="1300">1300 kg (1.30 Tn)</option>
+              <option value="1350">1350 kg (1.35 Tn)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Costo Insumo Bolsa 25kg ($/Unid)</label>
+            <input type="number" id="costoBolsa25" onchange="recalculateAll()">
+          </div>
+          <div class="form-group">
+            <label>Costo Insumo Portabolsas ($/Unid)</label>
+            <input type="number" id="costoPortabolsaUnid" onchange="recalculateAll()">
+          </div>
+          <div class="form-group">
+            <label>Desvío Mermas/Calidad Bolsas 25kg (%)</label>
+            <input type="number" step="0.1" id="desvioCalidadBolsas" onchange="recalculateAll()">
+          </div>
+          <div class="form-group">
+            <label>Desvío Mermas/Calidad Portabolsas (%)</label>
+            <input type="number" step="0.1" id="desvioCalidadPortabolsas" onchange="recalculateAll()">
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 3: CAPTURA COMPLETA DE LAS 18 VARIABLES DE PLANTA -->
+      <section class="section-card">
+        <div class="section-title">3. Captura Diaria de Variables Operativas de Planta</div>
         <div class="grid-4">
-          <div class="form-group">
-            <label>Bolsas 25kg / Hora (Empaque 1)</label>
-            <div style="display: flex; gap: 5px;">
-              <button class="btn btn-counter btn-danger" onclick="changeCounter('bolsas25', -10)">-</button>
-              <input type="number" id="bolsas25" value="320" style="text-align: center; font-weight: bold;" onchange="calculateAdminMetrics()">
-              <button class="btn btn-counter btn-success" onclick="changeCounter('bolsas25', 10)">+</button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Portabolsas / Hora (Empaque 2)</label>
-            <div style="display: flex; gap: 5px;">
-              <button class="btn btn-counter btn-danger" onclick="changeCounter('portabolsas', -1)">-</button>
-              <input type="number" id="portabolsas" value="12" style="text-align: center; font-weight: bold;" onchange="calculateAdminMetrics()">
-              <button class="btn btn-counter btn-success" onclick="changeCounter('portabolsas', 1)">+</button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Factor de Ineficacia (%) [Castigo Costos]</label>
-            <input type="number" id="factorIneficacia" value="8" step="0.5" onchange="calculateAdminMetrics()">
-          </div>
-          <div class="form-group">
-            <label>Factor de Ineficiencia (%) [Pérdida Tiempo]</label>
-            <input type="number" id="factorIneficiencia" value="12" step="0.5" onchange="calculateAdminMetrics()">
-          </div>
+          <div class="form-group"><label>1. Tn Objetivo Jornada</label><input type="number" id="v_tn_objetivo" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>2. Cantidad Granulometrías</label><input type="number" id="v_cant_granulometrias" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>3. Resto Material Tolva Final (Tn)</label><input type="number" id="v_resto_tolva" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>4. Paradas Cambio Material / Limpieza</label><input type="number" id="v_paradas_limpieza" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>5. Paradas Falta de Comunicación</label><input type="number" id="v_paradas_comunicacion" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>6. Paradas Falta Materia en Tolva</label><input type="number" id="v_paradas_falta_materia" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>7. Paradas Retiro Baño/Descanso</label><input type="number" id="v_paradas_retiro_personal" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>8. Paradas Falta de Bolsas 25kg</label><input type="number" id="v_paradas_falta_bolsas" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>9. Paradas Apertura Portabolsas</label><input type="number" id="v_paradas_apertura_portabolsas" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>10. Paradas Falta de Portabolsas</label><input type="number" id="v_paradas_falta_portabolsas" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>11. Llamadas Atención Celulares</label><input type="number" id="v_llamadas_atencion_celular" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>12. Rotaciones Intrajornada</label><input type="number" id="v_rotaciones_intrajornada" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>13. Incidencia Correctivo (Hs)</label><input type="number" step="0.1" id="v_incidencia_correctivo" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>14. Incidencia Preventivo (Hs)</label><input type="number" step="0.1" id="v_incidencia_preventivo" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>15. Tiempos Muertos / Riesgos</label><input type="number" id="v_tiempos_muertos_riesgo" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>16. Bolsas 25kg Procesadas Real</label><input type="number" id="v_bolsas_reales" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>17. Portabolsas Procesados Real</label><input type="number" id="v_portabolsas_reales" onchange="recalculateAll()"></div>
+          <div class="form-group"><label>18. Horas Efectivas de Turno</label><input type="number" id="v_horas_turno" onchange="recalculateAll()"></div>
+        </div>
+        <div class="grid-2" style="margin-top: 10px;">
+          <div class="form-group"><label>Recomendaciones Operativas</label><textarea id="v_recomendaciones" rows="2" onchange="recalculateAll()"></textarea></div>
+          <div class="form-group"><label>Observaciones Generales</label><textarea id="v_observaciones" rows="2" onchange="recalculateAll()"></textarea></div>
         </div>
       </section>
 
-      <!-- PANEL 2: ESTRUCTURA DETALLADA DE VARIABLES DE COSTOS POR RUBRO -->
+      <!-- SECCIÓN 4: HISTORIAL DE REGISTROS ALMACENADOS -->
       <section class="section-card">
-        <div class="section-title">
-          <span>Panel 2: Matriz Avanzada de Costos (Rubros y Familias)</span>
-          <button class="btn btn-sm btn-success" onclick="addCostItem()">+ Agregar Concepto de Costo</button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Concepto / Descripción del Incidente</th>
-              <th style="width: 180px;">Rubro / Familia</th>
-              <th style="width: 130px;">Tipo de Costo</th>
-              <th style="width: 140px;">Monto Total ($/Mes)</th>
-              <th style="width: 140px;">Impacto ($/Hs)</th>
-              <th style="width: 140px;">Impacto ($/Tn)</th>
-              <th style="width: 40px;"></th>
-            </tr>
-          </thead>
-          <tbody id="costMatrixTbody"></tbody>
-        </table>
-      </section>
-
-      <!-- PANEL 3: TIEMPOS MUERTOS Y REGISTRO DE DESVÍOS -->
-      <section class="section-card">
-        <div class="section-title">
-          <span>Panel 3: Registro de Desvíos Operativos y Paradas de Planta</span>
-          <button class="btn btn-sm btn-warning" onclick="addDowntimeItem()">+ Registrar Parada</button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Causa de Parada / Ineficiencia</th>
-              <th style="width: 130px;">Frecuencia</th>
-              <th style="width: 140px;">Tiempo Esperado (Min)</th>
-              <th style="width: 140px;">Tiempo Real (Min)</th>
-              <th style="width: 140px;">Desvío Total (Min)</th>
-              <th style="width: 160px;">Castigo Económico ($)</th>
-              <th style="width: 40px;"></th>
-            </tr>
-          </thead>
-          <tbody id="downtimeTbody"></tbody>
-        </table>
-      </section>
-
-      <!-- PANEL 4: HISTORIAL OPERATIVO Y REGISTROS ALMACENADOS -->
-      <section class="section-card">
-        <div class="section-title">
-          <span>Panel 4: Historial Operativo Acumulado de Planta</span>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn btn-sm btn-success" onclick="exportToExcel()">📊 Exportar Excel</button>
-            <button class="btn btn-sm btn-purple" onclick="exportToVNR()">🔄 Exportar SYNC VNR</button>
-          </div>
-        </div>
+        <div class="section-title">4. Historial Operativo Guardado</div>
         <div style="overflow-x: auto;">
           <table>
             <thead>
               <tr>
-                <th>Fecha / Hora</th>
-                <th>Bolsas 25kg</th>
-                <th>Portabolsas</th>
-                <th>Tn Totales</th>
-                <th>Hs Reales</th>
-                <th>Hs Expectativa</th>
-                <th>Paradas (Min)</th>
+                <th>Fecha/Hora</th>
+                <th>Tn Real</th>
+                <th>Portabolsas Vol.</th>
                 <th>Costo $/Hs</th>
                 <th>Costo $/Tn</th>
-                <th>OEE (%)</th>
+                <th>Desvío Paradas</th>
+                <th>Pérdida Ineficiencia</th>
                 <th>Acción</th>
               </tr>
             </thead>
@@ -299,49 +303,50 @@
     const ADMIN_USER = "gravafilt";
     const ADMIN_PASS = "gravafilt2026";
 
-    // ESTADO DE LA APLICACIÓN
-    let appState = {
-      bolsas25: 320,
-      portabolsas: 12,
-      factorIneficacia: 8,
-      factorIneficiencia: 12,
-      horasTurno: 8,
-      operarios: 12,
-      costs: [
-        { name: "Mano de Obra Directa (Operarios)", family: "Mano de Obra", type: "Fijo", monthlyCost: 12500000 },
-        { name: "Energía Eléctrica y Combustible Secadero", family: "Energía/Combustible", type: "Variable", monthlyCost: 8200000 },
-        { name: "Insumos Empaque (Bolsas, Film, Portabolsas)", family: "Insumos Empaque", type: "Variable", monthlyCost: 6400000 },
-        { name: "Mantenimiento Correctivo y Repuestos", family: "Mantenimiento", type: "Variable", monthlyCost: 3100000 },
-        { name: "Amortización de Maquinaria y Equipos", family: "Amortizaciones", type: "Fijo", monthlyCost: 4500000 }
-      ],
-      downtimes: [
-        { cause: "Falta de Materia Prima en Tolva", freq: 3, expectedMin: 15, realMin: 35 },
-        { cause: "Mantenimiento y Ajuste de Portabolsas", freq: 2, expectedMin: 10, realMin: 25 },
-        { cause: "Falta de Comunicación Intersectorial", freq: 2, expectedMin: 5, realMin: 18 }
-      ],
-      history: [
-        { timestamp: "2026-08-05 18:30", bolsas25: 310, portabolsas: 11, tnTotales: 62.5, hsReal: 8.5, hsExp: 8.0, paradas: 45, costoHs: 215000, costoTn: 29240, oee: 78.4 },
-        { timestamp: "2026-08-06 06:00", bolsas25: 330, portabolsas: 13, tnTotales: 68.0, hsReal: 8.0, hsExp: 8.0, paradas: 30, costoHs: 210000, costoTn: 24705, oee: 84.2 }
-      ]
+    // ESTADO INICIAL Y PRESETEO DE FÁBRICA
+    const FACTORY_DEFAULTS = {
+      costoKwh: 180,
+      consumoKwhHs: 250,
+      costoMantenimientoHs: 45000,
+      cantOperarios: 10,
+      categoriaAOMA: 10800, // Oficial
+      volumenPortabolsas: 1200,
+      costoBolsa25: 450,
+      costoPortabolsaUnid: 8500,
+      desvioCalidadBolsas: 3.5,
+      desvioCalidadPortabolsas: 2.0,
+      metrics: {
+        v_tn_objetivo: 450, v_cant_granulometrias: 5, v_resto_tolva: 15,
+        v_paradas_limpieza: 3, v_paradas_comunicacion: 2, v_paradas_falta_materia: 3,
+        v_paradas_retiro_personal: 4, v_paradas_falta_bolsas: 1, v_paradas_apertura_portabolsas: 2,
+        v_paradas_falta_portabolsas: 0, v_llamadas_atencion_celular: 3, v_rotaciones_intrajornada: 2,
+        v_incidencia_correctivo: 1.5, v_incidencia_preventivo: 0.5, v_tiempos_muertos_riesgo: 4,
+        v_bolsas_reales: 2800, v_portabolsas_reales: 15, v_horas_turno: 8,
+        v_recomendaciones: "Ajustar frecuencia de limpieza de tolva.",
+        v_observaciones: "Turno operado sin novedades críticas."
+      },
+      history: []
     };
+
+    let appState = JSON.parse(JSON.stringify(FACTORY_DEFAULTS));
 
     let charts = { rubros: null, desvios: null };
 
     document.addEventListener("DOMContentLoaded", () => {
       loadState();
-      calculateAdminMetrics();
+      recalculateAll();
       renderDashboard();
     });
 
     function loadState() {
-      const saved = localStorage.getItem("GRAVAFILT_FULL_STATE");
+      const saved = localStorage.getItem("GRAVAFILT_PRESET_STATE");
       if (saved) {
         try { appState = JSON.parse(saved); } catch(e) {}
       }
     }
 
     function saveState() {
-      localStorage.setItem("GRAVAFILT_FULL_STATE", JSON.stringify(appState));
+      localStorage.setItem("GRAVAFILT_PRESET_STATE", JSON.stringify(appState));
     }
 
     function toggleModal(id, show) {
@@ -361,192 +366,157 @@
 
     function openAdminPanel() {
       toggleModal("adminPanelModal", true);
-      document.getElementById("bolsas25").value = appState.bolsas25;
-      document.getElementById("portabolsas").value = appState.portabolsas;
-      document.getElementById("factorIneficacia").value = appState.factorIneficacia;
-      document.getElementById("factorIneficiencia").value = appState.factorIneficiencia;
+      document.getElementById("costoKwh").value = appState.costoKwh;
+      document.getElementById("consumoKwhHs").value = appState.consumoKwhHs;
+      document.getElementById("costoMantenimientoHs").value = appState.costoMantenimientoHs;
+      document.getElementById("cantOperarios").value = appState.cantOperarios;
+      document.getElementById("categoriaAOMA").value = appState.categoriaAOMA;
+      document.getElementById("volumenPortabolsas").value = appState.volumenPortabolsas;
+      document.getElementById("costoBolsa25").value = appState.costoBolsa25;
+      document.getElementById("costoPortabolsaUnid").value = appState.costoPortabolsaUnid;
+      document.getElementById("desvioCalidadBolsas").value = appState.desvioCalidadBolsas;
+      document.getElementById("desvioCalidadPortabolsas").value = appState.desvioCalidadPortabolsas;
 
-      renderCostMatrix();
-      renderDowntimes();
+      Object.keys(appState.metrics).forEach(key => {
+        const el = document.getElementById(key);
+        if (el) el.value = appState.metrics[key];
+      });
+
       renderHistory();
-      calculateAdminMetrics();
+      recalculateAll();
     }
 
-    function changeCounter(id, delta) {
-      const input = document.getElementById(id);
-      let val = (parseInt(input.value) || 0) + delta;
-      if (val < 0) val = 0;
-      input.value = val;
-      appState[id] = val;
-      calculateAdminMetrics();
+    // FUNCIONES DE RESETEO
+    function resetToZero() {
+      if (!confirm("¿Está seguro de resetear todas las variables registradas a 0?")) return;
+      Object.keys(appState.metrics).forEach(key => {
+        if (typeof appState.metrics[key] === 'number') appState.metrics[key] = 0;
+        else if (typeof appState.metrics[key] === 'string') appState.metrics[key] = "";
+      });
+      openAdminPanel();
+      recalculateAll();
     }
 
-    // RENDRERIZADO DE TABLAS ADMIN
-    function renderCostMatrix() {
-      const tbody = document.getElementById("costMatrixTbody");
-      tbody.innerHTML = appState.costs.map((item, idx) => `
-        <tr>
-          <td><input type="text" value="${item.name}" onchange="updateCostItem(${idx}, 'name', this.value)" style="width:100%;"></td>
-          <td>
-            <select onchange="updateCostItem(${idx}, 'family', this.value)" style="width:100%;">
-              <option value="Mano de Obra" ${item.family === 'Mano de Obra' ? 'selected' : ''}>Mano de Obra</option>
-              <option value="Energía/Combustible" ${item.family === 'Energía/Combustible' ? 'selected' : ''}>Energía/Combustible</option>
-              <option value="Insumos Empaque" ${item.family === 'Insumos Empaque' ? 'selected' : ''}>Insumos Empaque</option>
-              <option value="Mantenimiento" ${item.family === 'Mantenimiento' ? 'selected' : ''}>Mantenimiento</option>
-              <option value="Amortizaciones" ${item.family === 'Amortizaciones' ? 'selected' : ''}>Amortizaciones</option>
-              <option value="Otros Indirectos" ${item.family === 'Otros Indirectos' ? 'selected' : ''}>Otros Indirectos</option>
-            </select>
-          </td>
-          <td>
-            <select onchange="updateCostItem(${idx}, 'type', this.value)" style="width:100%;">
-              <option value="Fijo" ${item.type === 'Fijo' ? 'selected' : ''}>Fijo</option>
-              <option value="Variable" ${item.type === 'Variable' ? 'selected' : ''}>Variable</option>
-            </select>
-          </td>
-          <td><input type="number" value="${item.monthlyCost}" onchange="updateCostItem(${idx}, 'monthlyCost', parseFloat(this.value))" style="width:100%;"></td>
-          <td id="cost-hs-${idx}" style="font-weight:bold;">$ 0</td>
-          <td id="cost-tn-${idx}" style="font-weight:bold;">$ 0</td>
-          <td><button class="btn btn-sm btn-danger" onclick="removeCostItem(${idx})">✕</button></td>
-        </tr>
-      `).join('');
+    function resetToFactoryDefaults() {
+      if (!confirm("¿Desea restablecer todos los valores de fábrica preconfigurados?")) return;
+      const hist = appState.history;
+      appState = JSON.parse(JSON.stringify(FACTORY_DEFAULTS));
+      appState.history = hist;
+      saveState();
+      openAdminPanel();
+      recalculateAll();
     }
 
-    function addCostItem() {
-      appState.costs.push({ name: "Nuevo Concepto de Costo", family: "Otros Indirectos", type: "Variable", monthlyCost: 500000 });
-      renderCostMatrix();
-      calculateAdminMetrics();
-    }
+    // MOTOR DE CÁLCULOS MATEMÁTICOS E INTERRELACIONES
+    function recalculateAll() {
+      // Leer valores de inputs en el Admin
+      appState.costoKwh = parseFloat(document.getElementById("costoKwh")?.value) || appState.costoKwh;
+      appState.consumoKwhHs = parseFloat(document.getElementById("consumoKwhHs")?.value) || appState.consumoKwhHs;
+      appState.costoMantenimientoHs = parseFloat(document.getElementById("costoMantenimientoHs")?.value) || appState.costoMantenimientoHs;
+      appState.cantOperarios = parseFloat(document.getElementById("cantOperarios")?.value) || appState.cantOperarios;
+      appState.categoriaAOMA = parseFloat(document.getElementById("categoriaAOMA")?.value) || appState.categoriaAOMA;
+      appState.volumenPortabolsas = parseFloat(document.getElementById("volumenPortabolsas")?.value) || appState.volumenPortabolsas;
+      appState.costoBolsa25 = parseFloat(document.getElementById("costoBolsa25")?.value) || appState.costoBolsa25;
+      appState.costoPortabolsaUnid = parseFloat(document.getElementById("costoPortabolsaUnid")?.value) || appState.costoPortabolsaUnid;
+      appState.desvioCalidadBolsas = parseFloat(document.getElementById("desvioCalidadBolsas")?.value) || appState.desvioCalidadBolsas;
+      appState.desvioCalidadPortabolsas = parseFloat(document.getElementById("desvioCalidadPortabolsas")?.value) || appState.desvioCalidadPortabolsas;
 
-    function removeCostItem(idx) {
-      appState.costs.splice(idx, 1);
-      renderCostMatrix();
-      calculateAdminMetrics();
-    }
-
-    function updateCostItem(idx, field, val) {
-      appState.costs[idx][field] = val;
-      calculateAdminMetrics();
-    }
-
-    function renderDowntimes() {
-      const tbody = document.getElementById("downtimeTbody");
-      tbody.innerHTML = appState.downtimes.map((item, idx) => `
-        <tr>
-          <td><input type="text" value="${item.cause}" onchange="updateDowntime(${idx}, 'cause', this.value)" style="width:100%;"></td>
-          <td><input type="number" value="${item.freq}" onchange="updateDowntime(${idx}, 'freq', parseFloat(this.value))" style="width:100%;"></td>
-          <td><input type="number" value="${item.expectedMin}" onchange="updateDowntime(${idx}, 'expectedMin', parseFloat(this.value))" style="width:100%;"></td>
-          <td><input type="number" value="${item.realMin}" onchange="updateDowntime(${idx}, 'realMin', parseFloat(this.value))" style="width:100%;"></td>
-          <td id="dt-dev-${idx}" style="font-weight:bold;">0 Min</td>
-          <td id="dt-cost-${idx}" style="font-weight:bold; color:var(--accent-red);">$ 0</td>
-          <td><button class="btn btn-sm btn-danger" onclick="removeDowntime(${idx})">✕</button></td>
-        </tr>
-      `).join('');
-    }
-
-    function addDowntimeItem() {
-      appState.downtimes.push({ cause: "Nueva Ineficiencia Registrada", freq: 1, expectedMin: 10, realMin: 20 });
-      renderDowntimes();
-      calculateAdminMetrics();
-    }
-
-    function removeDowntime(idx) {
-      appState.downtimes.splice(idx, 1);
-      renderDowntimes();
-      calculateAdminMetrics();
-    }
-
-    function updateDowntime(idx, field, val) {
-      appState.downtimes[idx][field] = val;
-      calculateAdminMetrics();
-    }
-
-    // CÁLCULOS MATEMÁTICOS DE COSTOS Y OEE
-    function calculateAdminMetrics() {
-      appState.bolsas25 = parseFloat(document.getElementById("bolsas25")?.value) || appState.bolsas25;
-      appState.portabolsas = parseFloat(document.getElementById("portabolsas")?.value) || appState.portabolsas;
-      appState.factorIneficacia = parseFloat(document.getElementById("factorIneficacia")?.value) || appState.factorIneficacia;
-      appState.factorIneficiencia = parseFloat(document.getElementById("factorIneficiencia")?.value) || appState.factorIneficiencia;
-
-      // Tn Producción Hora = (Bolsas 25kg * 25kg / 1000) + (Portabolsas * 1.5 Tn)
-      const tnHora = ((appState.bolsas25 * 25) / 1000) + (appState.portabolsas * 1.25);
-      const tnMes = tnHora * 160; // 160 Hs mensuales estándar
-
-      let totalMonthlyCost = 0;
-      appState.costs.forEach((item, idx) => {
-        totalMonthlyCost += (item.monthlyCost || 0);
-        const costHs = (item.monthlyCost || 0) / 160;
-        const costTn = tnMes > 0 ? (item.monthlyCost || 0) / tnMes : 0;
-
-        const elHs = document.getElementById(`cost-hs-${idx}`);
-        const elTn = document.getElementById(`cost-tn-${idx}`);
-        if (elHs) elHs.innerText = `$ ${costHs.toLocaleString('es-AR', {maximumFractionDigits:0})}`;
-        if (elTn) elTn.innerText = `$ ${costTn.toLocaleString('es-AR', {maximumFractionDigits:0})}`;
+      // Actualizar Métricas de inputs
+      Object.keys(appState.metrics).forEach(key => {
+        const el = document.getElementById(key);
+        if (el) {
+          appState.metrics[key] = el.type === 'number' ? (parseFloat(el.value) || 0) : el.value;
+        }
       });
 
-      // Recargo por ineficacia / ineficiencia
-      const penalizationFactor = 1 + ((appState.factorIneficacia + appState.factorIneficiencia) / 100);
-      const totalCostHsWithPenalty = (totalMonthlyCost / 160) * penalizationFactor;
-      const totalCostTnWithPenalty = tnHora > 0 ? totalCostHsWithPenalty / tnHora : 0;
+      const m = appState.metrics;
 
-      const costPerMin = totalCostHsWithPenalty / 60;
+      // 1. Tonelaje Real Procesado = (Bolsas 25kg * 0.025 Tn) + (Portabolsas * Tonelaje de la Opción Seleccionada)
+      const tnEmpaque25 = m.v_bolsas_reales * 0.025;
+      const tnPortabolsas = m.v_portabolsas_reales * (appState.volumenPortabolsas / 1000);
+      const tnTotalReal = tnEmpaque25 + tnPortabolsas;
 
-      // Calcular Desvíos de Paradas
-      appState.downtimes.forEach((dt, idx) => {
-        const devMin = (dt.realMin - dt.expectedMin) * (dt.freq || 1);
-        const costImpact = devMin * costPerMin;
+      // 2. Costo Mano de Obra Hora = Operarios * Valor Categoria AOMA
+      const costoManoObraHs = appState.cantOperarios * appState.categoriaAOMA;
 
-        const devEl = document.getElementById(`dt-dev-${idx}`);
-        const costEl = document.getElementById(`dt-cost-${idx}`);
-        if (devEl) devEl.innerText = `${devMin > 0 ? '+' : ''}${devMin} Min`;
-        if (costEl) costEl.innerText = `$ ${costImpact.toLocaleString('es-AR', {maximumFractionDigits:0})}`;
-      });
+      // 3. Costo Energía Hora = KWh/Hs * $/KWh
+      const costoEnergiaHs = appState.consumoKwhHs * appState.costoKwh;
 
-      // Cálculo Sintético de OEE
-      const oeeVal = Math.max(0, Math.min(100, 100 - (appState.factorIneficiencia * 1.5) - (appState.factorIneficacia * 0.8)));
+      // 4. Costo Insumos Hora (con desvío por mermas y calidad)
+      const factorCalidadBolsa = 1 + (appState.desvioCalidadBolsas / 100);
+      const factorCalidadPB = 1 + (appState.desvioCalidadPortabolsas / 100);
+
+      const costoBolsasHs = m.v_horas_turno > 0 ? (m.v_bolsas_reales * appState.costoBolsa25 * factorCalidadBolsa) / m.v_horas_turno : 0;
+      const costoPBHs = m.v_horas_turno > 0 ? (m.v_portabolsas_reales * appState.costoPortabolsaUnid * factorCalidadPB) / m.v_horas_turno : 0;
+      const costoInsumosHs = costoBolsasHs + costoPBHs;
+
+      // Costo Horario Directo Base
+      const costoBaseHora = costoManoObraHs + costoEnergiaHs + appState.costoMantenimientoHs + costoInsumosHs;
+
+      // 5. Cálculo de Paradas y Tiempos Muertos en Minutos
+      const minLimpieza = m.v_paradas_limpieza * 15;
+      const minComunicacion = m.v_paradas_comunicacion * 10;
+      const minFaltaMateria = m.v_paradas_falta_materia * 20;
+      const minBaño = m.v_paradas_retiro_personal * 12;
+      const minFaltaBolsas = m.v_paradas_falta_bolsas * 15;
+      const minAperturaPB = m.v_paradas_apertura_portabolsas * 10;
+      const minFaltaPB = m.v_paradas_falta_portabolsas * 15;
+      const minCelulares = m.v_llamadas_atencion_celular * 8;
+      const minMaintCorrectivo = m.v_incidencia_correctivo * 60;
+      const minRiesgos = m.v_tiempos_muertos_riesgo * 10;
+
+      const totalMinutosParada = minLimpieza + minComunicacion + minFaltaMateria + minBaño + minFaltaBolsas + minAperturaPB + minFaltaPB + minCelulares + minMaintCorrectivo + minRiesgos;
+
+      // Costo de Ineficiencia = (Minutos Parada / 60) * Costo Horario Base
+      const costoPorMinuto = costoBaseHora / 60;
+      const perdidaPorIneficiencia = totalMinutosParada * costoPorMinuto;
+
+      // Costo Final Hora y Tonelada
+      const costoHsFinal = costoBaseHora + (m.v_horas_turno > 0 ? perdidaPorIneficiencia / m.v_horas_turno : 0);
+      const tnHoraEfectiva = m.v_horas_turno > 0 ? tnTotalReal / m.v_horas_turno : 0;
+      const costoTnFinal = tnHoraEfectiva > 0 ? costoHsFinal / tnHoraEfectiva : 0;
 
       appState.computed = {
-        totalMonthlyCost,
-        costHs: totalCostHsWithPenalty,
-        costTn: totalCostTnWithPenalty,
-        tnHora,
-        oee: oeeVal
+        tnTotalReal,
+        costoManoObraHs,
+        costoEnergiaHs,
+        costoMantenimientoHs: appState.costoMantenimientoHs,
+        costoInsumosHs,
+        costoBaseHora,
+        totalMinutosParada,
+        perdidaPorIneficiencia,
+        costoHsFinal,
+        costoTnFinal
       };
     }
 
     function saveAdminChanges() {
-      calculateAdminMetrics();
+      recalculateAll();
       saveState();
       renderDashboard();
       toggleModal("adminPanelModal", false);
     }
 
-    // REGISTRO HISTÓRICO
     function registrarJornadaEnHistorial() {
-      calculateAdminMetrics();
+      recalculateAll();
       const now = new Date();
       const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-      let totalParadasMin = 0;
-      appState.downtimes.forEach(dt => totalParadasMin += ((dt.realMin - dt.expectedMin) * dt.freq));
-
       const entry = {
         timestamp: dateStr,
-        bolsas25: appState.bolsas25,
-        portabolsas: appState.portabolsas,
-        tnTotales: parseFloat((appState.computed.tnHora * 8).toFixed(1)),
-        hsReal: 8.0,
-        hsExp: 8.0,
-        paradas: totalParadasMin,
-        costoHs: Math.round(appState.computed.costHs),
-        costoTn: Math.round(appState.computed.costTn),
-        oee: parseFloat(appState.computed.oee.toFixed(1))
+        tnReal: appState.computed.tnTotalReal.toFixed(1),
+        portabolsasVol: `${appState.volumenPortabolsas} kg`,
+        costoHs: Math.round(appState.computed.costoHsFinal),
+        costoTn: Math.round(appState.computed.costoTnFinal),
+        paradasMin: appState.computed.totalMinutosParada,
+        perdidaCost: Math.round(appState.computed.perdidaPorIneficiencia)
       };
 
       appState.history.unshift(entry);
       saveState();
       renderHistory();
       renderDashboard();
-      alert("✅ Jornada registrada exitosamente en el Historial Operativo.");
+      alert("✅ Registro guardado en el historial.");
     }
 
     function renderHistory() {
@@ -554,15 +524,12 @@
       tbody.innerHTML = appState.history.map((h, idx) => `
         <tr>
           <td><b>${h.timestamp}</b></td>
-          <td>${h.bolsas25} /hs</td>
-          <td>${h.portabolsas} /hs</td>
-          <td><b>${h.tnTotales} Tn</b></td>
-          <td>${h.hsReal} Hs</td>
-          <td>${h.hsExp} Hs</td>
-          <td><span class="badge ${h.paradas > 30 ? 'badge-danger' : 'badge-success'}">${h.paradas} Min</span></td>
+          <td><b>${h.tnReal} Tn</b></td>
+          <td>${h.portabolsasVol}</td>
           <td>$ ${h.costoHs.toLocaleString('es-AR')}</td>
           <td><b>$ ${h.costoTn.toLocaleString('es-AR')}</b></td>
-          <td style="color:var(--accent-green); font-weight:bold;">${h.oee}%</td>
+          <td><span class="badge ${h.paradasMin > 60 ? 'badge-danger' : 'badge-success'}">${h.paradasMin} Min</span></td>
+          <td style="color:var(--accent-red); font-weight:bold;">$ ${h.perdidaCost.toLocaleString('es-AR')}</td>
           <td><button class="btn btn-sm btn-danger" onclick="removeHistory(${idx})">✕</button></td>
         </tr>
       `).join('');
@@ -574,40 +541,45 @@
       renderHistory();
     }
 
-    // RENDERIZADO DASHBOARD PRINCIPAL
     function renderDashboard() {
-      calculateAdminMetrics();
+      recalculateAll();
+      const c = appState.computed;
 
-      document.getElementById("dash-oee").innerText = `${appState.computed.oee.toFixed(1)}%`;
-      document.getElementById("dash-costo-tn").innerText = `$ ${Math.round(appState.computed.costTn).toLocaleString('es-AR')}`;
-      document.getElementById("dash-costo-hs").innerText = `$ ${Math.round(appState.computed.costHs).toLocaleString('es-AR')}`;
-      document.getElementById("dash-tn-totales").innerText = `${(appState.computed.tnHora * 8).toFixed(1)} Tn`;
+      document.getElementById("dash-costo-tn").innerText = `$ ${Math.round(c.costoTnFinal).toLocaleString('es-AR')}`;
+      document.getElementById("dash-costo-hs").innerText = `$ ${Math.round(c.costoHsFinal).toLocaleString('es-AR')}`;
+      document.getElementById("dash-tn-totales").innerText = `${c.tnTotalReal.toFixed(1)} Tn`;
+      document.getElementById("dash-desvio-min").innerText = `${c.totalMinutosParada} Min`;
+      document.getElementById("dash-perdida-total").innerText = `$ ${Math.round(c.perdidaPorIneficiencia).toLocaleString('es-AR')}`;
 
-      const castigoHs = appState.computed.costHs - (appState.computed.totalMonthlyCost / 160);
-      document.getElementById("dash-castigo-total").innerText = `$ ${Math.round(castigoHs * 8).toLocaleString('es-AR')}`;
-
-      // Tabla de variables críticas
+      const m = appState.metrics;
       document.getElementById("dashTbodyVariables").innerHTML = `
         <tr>
-          <td><b>Línea de Empaque (Bolsas 25kg / Portabolsas)</b></td>
-          <td>${appState.bolsas25} Bolsas/hs - ${appState.portabolsas} Portabolsas/hs</td>
-          <td>350 Bolsas/hs - 15 Portabolsas/hs</td>
-          <td>Capacidad Productiva ($/Tn)</td>
-          <td><span class="badge ${appState.bolsas25 < 300 ? 'badge-danger' : 'badge-success'}">${appState.bolsas25 < 300 ? 'Subóptimo' : 'Eficiente'}</span></td>
+          <td><b>Tn Objetivo vs. Real Procesado</b></td>
+          <td><b>${m.v_tn_objetivo} Tn / ${c.tnTotalReal.toFixed(1)} Tn</b></td>
+          <td>Objetivo: ${m.v_tn_objetivo} Tn</td>
+          <td>Base de Amortización Operativa</td>
+          <td><span class="badge ${c.tnTotalReal < m.v_tn_objetivo ? 'badge-danger' : 'badge-success'}">${c.tnTotalReal < m.v_tn_objetivo ? 'Desvío Negativo' : 'Cumplido'}</span></td>
         </tr>
         <tr>
-          <td><b>Castigo por Ineficacia / Ineficiencia</b></td>
-          <td>Ineficacia: ${appState.factorIneficacia}% | Ineficiencia: ${appState.factorIneficiencia}%</td>
-          <td>< 5% Combinado</td>
-          <td>+$ ${Math.round(castigoHs).toLocaleString('es-AR')} / Hora</td>
-          <td><span class="badge badge-danger">Penalizado</span></td>
+          <td><b>Configuración Portabolsas</b></td>
+          <td>${m.v_portabolsas_reales} Unid. de <b>${appState.volumenPortabolsas} kg</b></td>
+          <td>Especif. Cliente / Expedición</td>
+          <td>Estructura Insumos ($/Tn)</td>
+          <td><span class="badge badge-success">Sincronizado</span></td>
         </tr>
         <tr>
-          <td><b>OEE Global de Sector Embalaje</b></td>
-          <td><b>${appState.computed.oee.toFixed(1)}%</b></td>
-          <td>> 85.0%</td>
-          <td>Disponibilidad y Performance</td>
-          <td><span class="badge ${appState.computed.oee < 80 ? 'badge-danger' : 'badge-success'}">${appState.computed.oee < 80 ? 'Alerta' : 'Excelente'}</span></td>
+          <td><b>Incidencia Mano de Obra AOMA y Energía</b></td>
+          <td>M.O: $ ${Math.round(c.costoManoObraHs).toLocaleString('es-AR')}/hs | Energía: $ ${Math.round(c.costoEnergiaHs).toLocaleString('es-AR')}/hs</td>
+          <td>${appState.cantOperarios} Operarios AOMA</td>
+          <td>Directo a Costo Horario Base</td>
+          <td><span class="badge badge-success">Normado</span></td>
+        </tr>
+        <tr>
+          <td><b>Mermas por Calidad de Bolsas / PB</b></td>
+          <td>Bolsas: +${appState.desvioCalidadBolsas}% | PB: +${appState.desvioCalidadPortabolsas}%</td>
+          <td>< 2.0% Tolerable</td>
+          <td>Recargo sobre Consumo Insumos</td>
+          <td><span class="badge ${appState.desvioCalidadBolsas > 3 ? 'badge-danger' : 'badge-success'}">${appState.desvioCalidadBolsas > 3 ? 'Alerta Calidad' : 'Normal'}</span></td>
         </tr>
       `;
 
@@ -618,59 +590,69 @@
       if (charts.rubros) charts.rubros.destroy();
       if (charts.desvios) charts.desvios.destroy();
 
-      // Agrupar Costos por Familia
-      const families = {};
-      appState.costs.forEach(c => {
-        families[c.family] = (families[c.family] || 0) + c.monthlyCost;
-      });
+      const c = appState.computed;
 
       charts.rubros = new Chart(document.getElementById("chartRubros"), {
         type: "doughnut",
         data: {
-          labels: Object.keys(families),
-          datasets: [{ data: Object.values(families), backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899"] }]
+          labels: ["Mano de Obra AOMA", "Energía Eléctrica", "Mantenimiento / Estructura", "Insumos Empaque", "Pérdida por Ineficiencia"],
+          datasets: [{
+            data: [
+              Math.round(c.costoManoObraHs),
+              Math.round(c.costoEnergiaHs),
+              Math.round(c.costoMantenimientoHs),
+              Math.round(c.costoInsumosHs),
+              Math.round(c.perdidaPorIneficiencia / (appState.metrics.v_horas_turno || 1))
+            ],
+            backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ef4444"]
+          }]
         },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "right", labels: { color: "#f8fafc" } } } }
       });
 
-      const dtLabels = appState.downtimes.map(d => d.cause);
-      const dtData = appState.downtimes.map(d => (d.realMin - d.expectedMin) * d.freq);
-
+      const m = appState.metrics;
       charts.desvios = new Chart(document.getElementById("chartDesvios"), {
         type: "bar",
         data: {
-          labels: dtLabels,
-          datasets: [{ label: "Desvío en Minutos", data: dtData, backgroundColor: "#ef4444" }]
+          labels: ["Limpieza Tolva", "Comunicación", "Falta Materia", "Retiro Baño", "Falta Insumos", "Maint. Correctivo"],
+          datasets: [{
+            label: "Minutos de Parada",
+            data: [
+              m.v_paradas_limpieza * 15,
+              m.v_paradas_comunicacion * 10,
+              m.v_paradas_falta_materia * 20,
+              m.v_paradas_retiro_personal * 12,
+              (m.v_paradas_falta_bolsas + m.v_paradas_falta_portabolsas) * 15,
+              m.v_incidencia_correctivo * 60
+            ],
+            backgroundColor: "#ef4444"
+          }]
         },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: "#f8fafc" } } } }
       });
     }
 
-    // MOTORES DE EXPORTACIÓN (EXCEL Y VNR)
     function exportToExcel() {
-      let csv = "Fecha/Hora;Bolsas 25kg;Portabolsas;Tn Totales;Hs Real;Hs Exp;Paradas Min;Costo $/Hs;Costo $/Tn;OEE %\n";
+      let csv = "Fecha/Hora;Tn Real;Portabolsas Vol;Costo $/Hs;Costo $/Tn;Paradas Min;Perdida Ineficiencia $\n";
       appState.history.forEach(h => {
-        csv += `${h.timestamp};${h.bolsas25};${h.portabolsas};${h.tnTotales};${h.hsReal};${h.hsExp};${h.paradas};${h.costoHs};${h.costoTn};${h.oee}\n`;
+        csv += `${h.timestamp};${h.tnReal};${h.portabolsasVol};${h.costoHs};${h.costoTn};${h.paradasMin};${h.perdidaCost}\n`;
       });
-
-      downloadFile(csv, "GRAVAFILT_HISTORIAL_OPERATIVO.csv", "text/csv;charset=utf-8;");
+      downloadFile(csv, "GRAVAFILT_MATRIZ_COSTOS.csv", "text/csv;charset=utf-8;");
     }
 
     function exportToVNR() {
       const vnrPayload = {
         empresa: "GRAVAFILT S.A.",
-        fechaSincronizacion: new Date().toISOString(),
-        unidadNegocio: "Procesamiento y Embolsado de Arenas/Gravas",
-        indicadoresVNR: {
-          costoVariableTn: appState.computed.costTn,
-          costoFijoHora: appState.computed.costHs,
-          oeeActual: appState.computed.oee,
-          penalizacionIneficienciaPorc: appState.factorIneficacia + appState.factorIneficiencia
+        fecha: new Date().toISOString(),
+        matrizParametros: {
+          volumenPortabolsasKg: appState.volumenPortabolsas,
+          categoriaAOMA: appState.categoriaAOMA,
+          costoTnFinal: appState.computed.costoTnFinal,
+          costoHsFinal: appState.computed.costoHsFinal
         },
-        historialCadena: appState.history
+        historialJornadas: appState.history
       };
-
-      downloadFile(JSON.stringify(vnrPayload, null, 2), "GRAVAFILT_SYNC_MATRIZ_VNR.json", "application/json");
+      downloadFile(JSON.stringify(vnrPayload, null, 2), "GRAVAFILT_MATRIZ_VNR.json", "application/json");
     }
 
     function downloadFile(content, fileName, mimeType) {

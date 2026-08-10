@@ -603,11 +603,21 @@
       const rubrosMasaTotal = rubrosFijosTotal + rubrosVariablesTotal;
 
       // 4. Insumos en Pesos ($) con recargo de merma
-      const factorMerma = 1 + (appState.desvioCalidadInsumos / 100);
-      const costoInsumosBolsa = appState.v_bolsas_reales * costoBolsa25_ARS * factorMerma;
-      const costoInsumosPB = appState.v_portabolsas_reales * costoPortabolsaUnid_ARS * factorMerma;
-      const costoInsumosTotalARS = costoInsumosBolsa + costoInsumosPB;
-      const costoInsumosTotalUSD = appState.tc_usd > 0 ? (costoInsumosTotalARS / appState.tc_usd) : 0;
+const factorMerma = 1 + (appState.desvioCalidadInsumos / 100);
+
+// Unidades mensuales de bolsas de 25 kg (si no se define en appState, toma por defecto un promedio de 23.000)
+const unidadesBolsas25_Mes = Number(appState.demandaBolsas25Mes) || 23000; 
+
+// Unidades mensuales de portabolsas (envase secundario)
+const unidadesPortabolsas_Mes = Number(appState.demandaPortabolsasMes) || appState.v_portabolsas_reales || 0;
+
+// Cálculo del costo total de insumos aplicando el factor de merma
+const costoInsumosBolsa = unidadesBolsas25_Mes * costoBolsa25_ARS * factorMerma;
+const costoInsumosPB = unidadesPortabolsas_Mes * costoPortabolsaUnid_ARS * factorMerma;
+
+// Totales de Insumos en ARS y USD
+const costoInsumosTotalARS = costoInsumosBolsa + costoInsumosPB;
+const costoInsumosTotalUSD = appState.tc_usd > 0 ? (costoInsumosTotalARS / appState.tc_usd) : 0;
 
       // 5. Energía Eléctrica Total
       const costoEnergiaMensualReal = appState.hs_reales * appState.consumoKwhHs * appState.costoKwh;

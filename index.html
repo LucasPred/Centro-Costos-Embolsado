@@ -637,26 +637,31 @@ const costoInsumosTotalUSD = costoInsumosTotalARS / tcActual;
       const costoEnergiaMensualReal = appState.hs_reales * appState.consumoKwhHs * appState.costoKwh;
       const costoEnergiaMensualExp = appState.hs_expectativa * appState.consumoKwhHs * appState.costoKwh;
 
-      // COSTOS TOTALES MENSUALES
-      const costoTotalMensualReal = moMasaTotal + rubrosMasaTotal + costoInsumosTotalARS + costoEnergiaMensualReal;
-      const costoTotalMensualExp = moFijaTotal + rubrosFijosTotal + (costoInsumosTotalARS * (appState.tn_objetivo / (tnTotalReal || 1))) + costoEnergiaMensualExp;
+     // COSTOS TOTALES MENSUALES (CORREGIDO - DESACOPLADO)
+const costoTotalMensualReal = moMasaTotal + rubrosMasaTotal + costoInsumosTotalARS + costoEnergiaMensualReal;
 
-      // CALCULOS DE METRICAS HORARIAS Y POR TONELADA
-      const hsReal = appState.hs_reales > 0 ? appState.hs_reales : 1;
-      const hsExp = appState.hs_expectativa > 0 ? appState.hs_expectativa : 1;
-      const tnReal = tnTotalReal > 0 ? tnTotalReal : 1;
-      const tnExp = appState.tn_objetivo > 0 ? appState.tn_objetivo : 1;
+// Insumo unitario por tonelada esperada (Portabolsa en USD * Tipo de Cambio)
+const costoPortabolsaTeoricoARS = (appState.costo_portabolsa_usd || 0) * (appState.tc_usd || 1);
+const costoInsumosTotalExpARS = appState.tn_objetivo * costoPortabolsaTeoricoARS;
 
-      const costoHsReal = costoTotalMensualReal / hsReal;
-      const costoHsExp = costoTotalMensualExp / hsExp;
+// Expectativa total mensual basada únicamente en el objetivo teóricamente aislado
+const costoTotalMensualExp = moFijaTotal + (rubrosFijosTotal || 0) + costoInsumosTotalExpARS + (costoEnergiaMensualExp || 0);
 
-      const costoTnReal = costoTotalMensualReal / tnReal;
-      const costoTnExp = costoTotalMensualExp / tnExp;
+// CALCULOS DE METRICAS HORARIAS Y POR TONELADA
+const hsReal = appState.hs_reales > 0 ? appState.hs_reales : 1;
+const hsExp = appState.hs_expectativa > 0 ? appState.hs_expectativa : 1;
+const tnReal = tnTotalReal > 0 ? tnTotalReal : 1;
+const tnExp = appState.tn_objetivo > 0 ? appState.tn_objetivo : 1;
 
-      const desvioCostoTn = costoTnReal - costoTnExp;
-      const desvioPorcentaje = costoTnExp > 0 ? ((costoTnReal - costoTnExp) / costoTnExp) * 100 : 0;
-      const eficienciaHoras = hsExp > 0 ? (hsReal / hsExp) * 100 : 0;
+const costoHsReal = costoTotalMensualReal / hsReal;
+const costoHsExp = costoTotalMensualExp / hsExp;
 
+const costoTnReal = costoTotalMensualReal / tnReal;
+const costoTnExp = costoTotalMensualExp / tnExp;
+
+const desvioCostoTn = costoTnReal - costoTnExp;
+const desvioPorcentaje = costoTnExp > 0 ? ((costoTnReal - costoTnExp) / costoTnExp) * 100 : 0;
+const eficienciaHoras = hsExp > 0 ? (hsReal / hsExp) * 100 : 0;
       appState.computed = {
         tnTotalReal,
         moMasaTotal,

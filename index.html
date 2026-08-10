@@ -602,18 +602,25 @@
       });
       const rubrosMasaTotal = rubrosFijosTotal + rubrosVariablesTotal;
 
-      // 4. Insumos en Pesos ($) con recargo de merma
+     // 4. Insumos en Pesos ($) con recargo de merma
 const factorMerma = 1 + (appState.desvioCalidadInsumos / 100);
 
-// Precios unitarios
+// Precios unitarios convertidos a Pesos según el TC del mes
 const precioBolsaARS = (Number(appState.precioBolsa25_USD) || 0) * appState.tc_usd;
 const precioPortabolsaARS = (Number(appState.precioPortabolsa_USD) || 0) * appState.tc_usd;
 
-// Costo de bolsas y portabolsas
-const costoInsumosBolsa = appState.v_bolsas_reales * precioBolsaARS * factorMerma;
-const costoInsumosPB = appState.v_portabolsas_reales * precioPortabolsaARS * factorMerma;
+// 1. Determinar el volumen real del mes (ej. 511 Tn / Portabolsas)
+const tnProcesadasMes = Number(appState.v_portabolsas_reales) || (Number(appState.v_bolsas_reales) / 40) || 0;
 
-// Suma total de insumos (Bolsas 25kg + Portabolsas)
+// 2. Cantidad física de cada envase para dicho volumen (1 Tn = 40 bolsas = 1 portabolsa)
+const unidadesBolsas25 = tnProcesadasMes * 40; // Ej: 511 Tn * 40 = 20.440 bolsas
+const unidadesPortabolsas = tnProcesadasMes;   // Ej: 511 portabolsas
+
+// 3. Costos Totales de Insumos (Primario + Secundario)
+const costoInsumosBolsa = unidadesBolsas25 * precioBolsaARS * factorMerma;
+const costoInsumosPB = unidadesPortabolsas * precioPortabolsaARS * factorMerma;
+
+// 4. Integración del Costo Total de Insumos (SIN duplicar toneladas ni distorsionar prorrateos)
 const costoInsumosTotalARS = costoInsumosBolsa + costoInsumosPB;
 const costoInsumosTotalUSD = appState.tc_usd > 0 ? (costoInsumosTotalARS / appState.tc_usd) : 0;
 

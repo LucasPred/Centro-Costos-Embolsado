@@ -602,27 +602,43 @@
       });
       const rubrosMasaTotal = rubrosFijosTotal + rubrosVariablesTotal;
 
-     // 4. Insumos en Pesos ($) con recargo de merma
-const factorMerma = 1 + (appState.desvioCalidadInsumos / 100);
+    // 4. INSUMOS Y EMBOLSADO (Corregido: sin duplicación de Tn y sin $0 en insumos)
 
-// Precios unitarios convertidos a Pesos según el TC del mes
-const precioBolsaARS = (Number(appState.precioBolsa25_USD) || 0) * appState.tc_usd;
-const precioPortabolsaARS = (Number(appState.precioPortabolsa_USD) || 0) * appState.tc_usd;
+// Factor de merma (por defecto 0% si no existe)
+const factorMerma = 1 + ((Number(appState.desvioCalidadInsumos) || 0) / 100);
 
-// 1. Determinar el volumen real del mes (ej. 511 Tn / Portabolsas)
-const tnProcesadasMes = Number(appState.v_portabolsas_reales) || (Number(appState.v_bolsas_reales) / 40) || 0;
+// Tipo de cambio USD a ARS (mínimo 1 para evitar división por 0)
+const tcActual = Number(appState.tc_usd) > 0 ? Number(appState.tc_usd) : 1;
 
-// 2. Cantidad física de cada envase para dicho volumen (1 Tn = 40 bolsas = 1 portabolsa)
-const unidadesBolsas25 = tnProcesadasMes * 40; // Ej: 511 Tn * 40 = 20.440 bolsas
-const unidadesPortabolsas = tnProcesadasMes;   // Ej: 511 portabolsas
+// A. Precios Unitarios en USD a ARS
+const pBolsaUSD = Number(appState.precioBolsa25_USD) || 0.35;      // Valor por defecto si no ingresó
+const pPortabolsaUSD = Number(appState.precioPortabolsa_USD) || 8.50; // Valor por defecto si no ingresó
 
-// 3. Costos Totales de Insumos (Primario + Secundario)
-const costoInsumosBolsa = unidadesBolsas25 * precioBolsaARS * factorMerma;
-const costoInsumosPB = unidadesPortabolsas * precioPortabolsaARS * factorMerma;
+const pBolsaARS = pBolsaUSD * tcActual;
+const pPortabolsaARS = pPortabolsaUSD * tcActual;
 
-// 4. Integración del Costo Total de Insumos (SIN duplicar toneladas ni distorsionar prorrateos)
-const costoInsumosTotalARS = costoInsumosBolsa + costoInsumosPB;
-const costoInsumosTotalUSD = appState.tc_usd > 0 ? (costoInsumosTotalARS / appState.tc_usd) : 0;
+// B. Volumen Unificado en Toneladas (EVITA LA DUPLICACIÓN DE TN)
+// Prioriza las toneladas reales ingresadas sin sumar de más
+let tnMesUnicas = Number(appState.v_portabolsas_reales) || 0;
+
+if (tnMesUnicas === 0 && Number(appState.v_bolsas_reales) > 0) {
+  tnMesUnicas = Number(appState.v_bolsas_reales) / 40;
+}
+
+// C. Conteo de unidades físicas exactas basadas en las Toneladas Únicas
+const cantPortabolsas = tnMesUnicas;          // 1 Tn = 1 Portabolsa
+const cantBolsas25 = tnMesUnicas * 40;        // 1 Tn = 40 Bolsas de 25kg
+
+// D. Cálculo de Costos en ARS
+const costoBolsasARS = cantBolsas25 * pBolsaARS * factorMerma;
+const costoPortabolsasARS = cantPortabolsas * pPortabolsaARS * factorMerma;
+
+// E. Totales de Insumos Integrados
+const costoInsumosTotalARS = costoBolsasARS + costoPortabolsasARS;
+const costoInsumosTotalUSD = costoInsumosTotalARS / tcActual;
+
+// F. Asegurar que appState guarde el volumen unificado correcto
+appState.v_embolsado_tn_mes = tnMesUnicas;
 
       // 5. Energía Eléctrica Total
       const costoEnergiaMensualReal = appState.hs_reales * appState.consumoKwhHs * appState.costoKwh;

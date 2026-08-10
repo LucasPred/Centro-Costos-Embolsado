@@ -571,7 +571,7 @@
 
       // CONVERSIÓN DE INSUMOS USD -> ARS ($)
       const costoBolsa25_ARS = appState.costoBolsa25_USD * appState.tc_usd;
-      const costoPortabolsaUnid_ARS = appState.costoPortabolsaUnid_USD * appState.tc_usd;
+      const costoPortabolsaUnid_ARS = (appState.costoPortabolsaUnid_USD * 2) * appState.tc_usd;
 
       // Actualización Visor Admin
       if (document.getElementById("visor-bolsa-ars")) {

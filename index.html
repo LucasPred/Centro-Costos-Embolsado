@@ -113,6 +113,10 @@
         <div class="kpi-value" id="dash-tc-usd" style="color: var(--accent-green);">$ 0</div>
         <div class="kpi-sub" id="dash-insumos-usd-total" style="color: var(--text-muted);">Insumos: USD 0</div>
       </div>
+      <div class="col-md-3 mb-3">
+  <label class="form-label font-weight-bold">Bolsas 25kg Procesadas (U)</label>
+  <input type="number" id="v_bolsas_25_adicional" class="form-control" placeholder="Ej: 20450" oninput="recalculateAll()">
+</div>
       <div class="kpi-card">
         <div class="kpi-title">Masa Salarial AOMA / Rubros</div>
         <div class="kpi-value" id="dash-mo-total" style="color: var(--accent-purple);">$ 0</div>
@@ -577,6 +581,21 @@
       if (document.getElementById("visor-bolsa-ars")) {
         document.getElementById("visor-bolsa-ars").innerText = `$ ${costoBolsa25_ARS.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         document.getElementById("visor-portabolsa-ars").innerText = `$ ${costoPortabolsaUnid_ARS.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+     // --- INSUMO ADICIONAL: BOLSAS DE 25KG INDEPENDIENTE ---
+  const cantBolsas25Indep = Number(document.getElementById("v_bolsas_25_adicional")?.value) || 0;
+  const precioBolsa25USD = Number(appState.costoBolsa25_USD || appState.costo_bolsa25_usd) || 0.215;
+  const tcActual = Number(appState.tc_usd) || 1;
+
+  const costoBolsas25IndepARS = (cantBolsas25Indep * precioBolsa25USD) * tcActual;
+
+  if (appState.computed) {
+    appState.computed.costoBolsas25IndepARS = costoBolsas25IndepARS;
+    appState.computed.costoTotalMensualReal = (appState.computed.costoTotalMensualReal || 0) + costoBolsas25IndepARS;
+    
+    const tnRealActual = appState.computed.tnTotalReal > 0 ? appState.computed.tnTotalReal : 1;
+    appState.computed.costoTnReal = appState.computed.costoTotalMensualReal / tnRealActual;
+  }
+}
       }
 
       // 1. Tonelaje Real Producido

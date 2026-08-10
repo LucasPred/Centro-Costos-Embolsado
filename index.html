@@ -193,45 +193,45 @@
         </div>
       </div>
 
-      <!-- SECCIÓN 1: HORAS Y TONELADAS (EXPECTATIVA VS REAL) -->
-      <section class="section-card">
-        <div class="section-title">1. Parámetros Basales: Horas Teóricas vs. Reales y Producción Volumétrica</div>
-        <div class="grid-6">
-          <div class="form-group">
-            <label>Horas Expectativa (Teóricas / Mes)</label>
-            <input type="number" id="hs_expectativa" onchange="recalculateAll()">
-          </div>
-          <div class="form-group">
-            <label>Horas Productivas Reales (Mes)</label>
-            <input type="number" id="hs_reales" onchange="recalculateAll()">
-          </div>
-          <div class="form-group">
-            <label>Toneladas Objetivo (Expectativa)</label>
-            <input type="number" id="tn_objetivo" onchange="recalculateAll()">
-          </div>
-          <div class="form-group">
-            <label>Capacidad Portabolsas Expedición</label>
-            <select id="volumenPortabolsas" onchange="recalculateAll()">
-              <option value="1000">1000 kg (1.00 Tn)</option>
-              <option value="1050">1050 kg (1.05 Tn)</option>
-              <option value="1100">1100 kg (1.10 Tn)</option>
-              <option value="1150">1150 kg (1.15 Tn)</option>
-              <option value="1200" selected>1200 kg (1.20 Tn)</option>
-              <option value="1250">1250 kg (1.25 Tn)</option>
-              <option value="1300">1300 kg (1.30 Tn)</option>
-              <option value="1350">1350 kg (1.35 Tn)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Cantidad Bolsas 25kg Procesadas</label>
-            <input type="number" id="v_bolsas_reales" onchange="recalculateAll()">
-          </div>
-          <div class="form-group">
-            <label>Cantidad Portabolsas Procesados</label>
-            <input type="number" id="v_portabolsas_reales" onchange="recalculateAll()">
-          </div>
-        </div>
-      </section>
+   <!-- SECCIÓN 1: HORAS Y TONELADAS (EXPECTATIVA VS REAL) -->
+<section class="section-card">
+  <div class="section-title">1. Parámetros Basales: Horas Teóricas vs. Reales y Producción Volumétrica</div>
+  <div class="grid-6">
+    <div class="form-group">
+      <label>Horas Expectativa (Teóricas / Mes)</label>
+      <input type="number" id="hs_expectativa" onchange="recalculateAll()">
+    </div>
+    <div class="form-group">
+      <label>Horas Productivas Reales (Mes)</label>
+      <input type="number" id="hs_reales" onchange="recalculateAll()">
+    </div>
+    <div class="form-group">
+      <label>Toneladas Objetivo (Expectativa)</label>
+      <input type="number" id="tn_objetivo" onchange="recalculateAll()">
+    </div>
+    <div class="form-group">
+      <label>Capacidad Portabolsas Expedición</label>
+      <select id="volumenPortabolsas" onchange="recalculateAll()">
+        <option value="1000" selected>1000 kg (1.00 Tn)</option>
+        <option value="1050">1050 kg (1.05 Tn)</option>
+        <option value="1100">1100 kg (1.10 Tn)</option>
+        <option value="1150">1150 kg (1.15 Tn)</option>
+        <option value="1200">1200 kg (1.20 Tn)</option>
+        <option value="1250">1250 kg (1.25 Tn)</option>
+        <option value="1300">1300 kg (1.30 Tn)</option>
+        <option value="1350">1350 kg (1.35 Tn)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Cantidad Bolsas 25kg Procesadas</label>
+      <input type="number" id="cant_bolsas_25" onchange="recalculateAll()">
+    </div>
+    <div class="form-group">
+      <label>Cantidad Portabolsas Procesados</label>
+      <input type="number" id="cant_portabolsas" onchange="recalculateAll()">
+    </div>
+  </div>
+</section>
 
       <!-- SECCIÓN 2: TIPO DE CAMBIO, INSUMOS USD Y ENERGÍA ELÉCTRICA -->
       <section class="section-card">
@@ -552,32 +552,106 @@
     }
 
     // MOTOR DE CÁLCULO DE CERTEZA ECONÓMICA
-    function recalculateAll() {
-      // Captura de valores
-      appState.hs_expectativa = parseFloat(document.getElementById("hs_expectativa")?.value) || appState.hs_expectativa;
-      appState.hs_reales = parseFloat(document.getElementById("hs_reales")?.value) || appState.hs_reales;
-      appState.tn_objetivo = parseFloat(document.getElementById("tn_objetivo")?.value) || appState.tn_objetivo;
-      appState.volumenPortabolsas = parseFloat(document.getElementById("volumenPortabolsas")?.value) || appState.volumenPortabolsas;
-      appState.v_bolsas_reales = parseFloat(document.getElementById("v_bolsas_reales")?.value) || appState.v_bolsas_reales;
-      appState.v_portabolsas_reales = parseFloat(document.getElementById("v_portabolsas_reales")?.value) || appState.v_portabolsas_reales;
-      
-      appState.tc_usd = parseFloat(document.getElementById("tc_usd")?.value) || appState.tc_usd;
-      appState.costoBolsa25_USD = parseFloat(document.getElementById("costoBolsa25_USD")?.value) || appState.costoBolsa25_USD;
-      appState.costoPortabolsaUnid_USD = parseFloat(document.getElementById("costoPortabolsaUnid_USD")?.value) || appState.costoPortabolsaUnid_USD;
-      appState.desvioCalidadInsumos = parseFloat(document.getElementById("desvioCalidadInsumos")?.value) || appState.desvioCalidadInsumos;
+function recalculateAll() {
+  // 1. CAPTURA Y LECTURA DIRECTA DE INPUTS (Paso a 0 si el campo está vacío)
+  appState.hs_expectativa = Number(document.getElementById("hs_expectativa")?.value) || 0;
+  appState.hs_reales = Number(document.getElementById("hs_reales")?.value) || 0;
+  appState.tn_objetivo = Number(document.getElementById("tn_objetivo")?.value) || 0;
+  appState.volumenPortabolsas = Number(document.getElementById("volumenPortabolsas")?.value) || 1000;
 
-      appState.costoKwh = parseFloat(document.getElementById("costoKwh")?.value) || appState.costoKwh;
-      appState.consumoKwhHs = parseFloat(document.getElementById("consumoKwhHs")?.value) || appState.consumoKwhHs;
+  // Captura dinámica del mes (compatible con cant_bolsas_25 o v_bolsas_reales)
+  const cantBolsas25Real = Number(document.getElementById("cant_bolsas_25")?.value || document.getElementById("v_bolsas_reales")?.value) || 0;
+  const cantPortabolsasReal = Number(document.getElementById("cant_portabolsas")?.value || document.getElementById("v_portabolsas_reales")?.value) || 0;
 
-      // CONVERSIÓN DE INSUMOS USD -> ARS ($)
-      const costoBolsa25_ARS = appState.costoBolsa25_USD * appState.tc_usd;
-      const costoPortabolsaUnid_ARS = appState.costoPortabolsaUnid_USD * appState.tc_usd;
+  appState.cant_bolsas_25 = cantBolsas25Real;
+  appState.cant_portabolsas = cantPortabolsasReal;
 
-      // Actualización Visor Admin
-      if (document.getElementById("visor-bolsa-ars")) {
-        document.getElementById("visor-bolsa-ars").innerText = `$ ${costoBolsa25_ARS.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        document.getElementById("visor-portabolsa-ars").innerText = `$ ${costoPortabolsaUnid_ARS.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-      }
+  appState.tc_usd = Number(document.getElementById("tc_usd")?.value) || appState.tc_usd || 1;
+  appState.costoBolsa25_USD = Number(document.getElementById("costoBolsa25_USD")?.value) || appState.costoBolsa25_USD || 0.215;
+  appState.costoPortabolsaUnid_USD = Number(document.getElementById("costoPortabolsaUnid_USD")?.value) || appState.costoPortabolsaUnid_USD || 6.20;
+  appState.desvioCalidadInsumos = Number(document.getElementById("desvioCalidadInsumos")?.value) || 0;
+
+  appState.costoKwh = Number(document.getElementById("costoKwh")?.value) || 0;
+  appState.consumoKwhHs = Number(document.getElementById("consumoKwhHs")?.value) || 0;
+
+  // 2. CONVERSIÓN DE INSUMOS UNITARIOS USD -> ARS ($)
+  const costoBolsa25_ARS = appState.costoBolsa25_USD * appState.tc_usd;
+  const costoPortabolsaUnid_ARS = appState.costoPortabolsaUnid_USD * appState.tc_usd;
+
+  // Actualización de Visores en Pantalla
+  if (document.getElementById("visor-bolsa-ars")) {
+    document.getElementById("visor-bolsa-ars").innerText = `$ ${costoBolsa25_ARS.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+  }
+  if (document.getElementById("visor-portabolsa-ars")) {
+    document.getElementById("visor-portabolsa-ars").innerText = `$ ${costoPortabolsaUnid_ARS.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+  }
+
+  // 3. CÁLCULO INDEPENDIENTE Y REAL DE INSUMOS DE EMPAQUE (20.450 bolsas / 511 portabolsas)
+  const costoBolsasUSD = cantBolsas25Real * appState.costoBolsa25_USD;
+  const costoPortabolsasUSD = cantPortabolsasReal * appState.costoPortabolsaUnid_USD;
+
+  const costoInsumosTotalUSD = costoBolsasUSD + costoPortabolsasUSD;
+  const costoInsumosTotalARS = costoInsumosTotalUSD * appState.tc_usd;
+
+  // 4. TONELADAS FÍSICAS PROCESADAS
+  const tnBolsas = (cantBolsas25Real * 25) / 1000;
+  const tnPortabolsas = (cantPortabolsasReal * appState.volumenPortabolsas) / 1000;
+  const tnTotalReal = tnPortabolsas > 0 ? tnPortabolsas : tnBolsas;
+
+  // 5. CÁLCULO DE MANO DE OBRA Y RUBROS
+  const moMasaTotal = (appState.employees || []).reduce((acc, emp) => acc + (Number(emp.basico) || 0) + (Number(emp.cargas) || 0) + (Number(emp.variables) || 0), 0);
+  const moFijaTotal = (appState.employees || []).reduce((acc, emp) => acc + (Number(emp.basico) || 0) + (Number(emp.cargas) || 0), 0);
+  const rubrosMasaTotal = (appState.rubrosAdicionales || []).reduce((acc, r) => acc + (Number(r.monto) || 0), 0);
+
+  // 6. ENERGÍA ELÉCTRICA
+  const costoEnergiaMensualReal = appState.hs_reales * appState.consumoKwhHs * appState.costoKwh;
+  const costoEnergiaMensualExp = appState.hs_expectativa * appState.consumoKwhHs * appState.costoKwh;
+
+  // 7. COSTOS TOTALES MENSUALES (REAL VS EXPECTATIVA TEÓRICA AISLADA)
+  const costoTotalMensualReal = moMasaTotal + rubrosMasaTotal + costoInsumosTotalARS + costoEnergiaMensualReal;
+
+  // Expectativa de insumos basada en el objetivo en toneladas x costo del portabolsa en ARS
+  const costoInsumosTotalExpARS = appState.tn_objetivo * costoPortabolsaUnid_ARS;
+  const costoTotalMensualExp = moFijaTotal + rubrosMasaTotal + costoInsumosTotalExpARS + costoEnergiaMensualExp;
+
+  // 8. MÉTRICAS HORARIAS Y POR TONELADA
+  const hsReal = appState.hs_reales > 0 ? appState.hs_reales : 1;
+  const hsExp = appState.hs_expectativa > 0 ? appState.hs_expectativa : 1;
+  const tnReal = tnTotalReal > 0 ? tnTotalReal : 1;
+  const tnExp = appState.tn_objetivo > 0 ? appState.tn_objetivo : 1;
+
+  const costoHsReal = costoTotalMensualReal / hsReal;
+  const costoHsExp = costoTotalMensualExp / hsExp;
+
+  const costoTnReal = costoTotalMensualReal / tnReal;
+  const costoTnExp = costoTotalMensualExp / tnExp;
+
+  const desvioCostoTn = costoTnReal - costoTnExp;
+  const desvioPorcentaje = costoTnExp > 0 ? ((costoTnReal - costoTnExp) / costoTnExp) * 100 : 0;
+  const eficienciaHoras = hsExp > 0 ? (hsReal / hsExp) * 100 : 0;
+
+  // 9. OBJETO COMPUTADO FINAL PARA EL DASHBOARD
+  appState.computed = {
+    tnTotalReal,
+    moMasaTotal,
+    moFijaTotal,
+    rubrosMasaTotal,
+    costoInsumosTotalARS,
+    costoInsumosTotalUSD,
+    costoBolsa25_ARS,
+    costoPortabolsaUnid_ARS,
+    costoEnergiaMensualReal,
+    costoTotalMensualReal,
+    costoTotalMensualExp,
+    costoHsReal,
+    costoHsExp,
+    costoTnReal,
+    costoTnExp,
+    desvioCostoTn,
+    desvioPorcentaje,
+    eficienciaHoras
+  };
+}
 
       // 1. Tonelaje Real Producido
       const tnEmpaque25 = appState.v_bolsas_reales * 0.025;
